@@ -1,0 +1,399 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title></title><style>:root{color-scheme:light;--ink:#27392e;--muted:#788477;--green:#2d684e;--line:#dce1d5;--paper:#f9faf6}*{box-sizing:border-box}[hidden]{display:none!important}body{margin:0;background:#eff1e9;color:var(--ink);font:14px system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}button,input,textarea{font:inherit}button{cursor:pointer;padding:9px 14px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink)}button:hover{background:#e9efe5}button:disabled{opacity:.5;cursor:wait}button:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid #4a9170;outline-offset:2px}.primary{background:var(--green);color:white;border-color:var(--green)}.primary:hover{background:#1d503a}header{max-width:1320px;margin:auto;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;gap:18px}.brand{display:flex;align-items:center;gap:14px}.logo{display:grid;place-items:center;height:44px;width:44px;border-radius:12px;background:var(--ink);color:#f1f8e8;font:24px Georgia}h1{margin:0;font:26px Georgia;letter-spacing:-.6px}.brand p{font-size:12px;margin:5px 0 0;color:var(--muted)}.actions{display:flex;gap:8px}.actions .primary{min-width:86px}main{max-width:1256px;margin:auto;padding:0 24px}.document{padding:20px 24px;background:var(--paper);border:1px solid var(--line);border-radius:13px 13px 0 0;display:flex;align-items:center;justify-content:space-between;gap:16px}.document label{display:block;font-size:10px;letter-spacing:1.8px;color:var(--muted);margin-bottom:6px}#filename{padding:0;border:0;background:transparent;width:min(400px,45vw);color:var(--ink);font-weight:600;font-size:16px}#draft-status{font-size:11px;color:var(--muted);text-align:right}.tab-bar{display:flex;justify-content:space-between;align-items:center;background:#f4f6ef;border:1px solid var(--line);border-top:0;padding:0 15px;gap:12px;min-height:47px}.tab-bar [role=tab]{background:transparent;border:0;border-radius:0;color:var(--muted);padding:14px 20px;font-size:13px;border-bottom:2px solid transparent}.tab-bar [aria-selected=true]{color:var(--green);border-bottom-color:var(--green);background:#fbfcf8}.view-controls{display:flex;align-items:center;gap:16px;font-size:11px;color:var(--muted)}.view-controls label{display:flex;gap:5px;align-items:center}.view-controls button{font-size:11px;background:transparent;border:0;padding:5px}.view-controls input{accent-color:var(--green)}section{border:1px solid var(--line);border-top:0;background:#fcfdf9;height:calc(100vh - 300px);min-height:380px;display:flex;flex-direction:column}textarea{display:block;width:100%;height:100%;border:0;resize:none;background:transparent;padding:27px 32px;line-height:1.8;color:#354638;font:14px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;tab-size:4;white-space:pre-wrap;overflow-wrap:break-word}textarea:focus{outline:none}.diff-toolbar{display:flex;align-items:center;gap:12px;padding:11px 20px;border-bottom:1px solid var(--line);flex-shrink:0;background:#fafbf7;flex-wrap:wrap}.diff-toolbar>span{margin-right:auto;font-size:11px;color:var(--muted)}.diff-toolbar button{font-size:11px;padding:6px 9px}.segmented{background:#eaf0e4;border-radius:6px;padding:3px;display:flex;gap:2px}.segmented button{border:0;background:transparent}.segmented [aria-pressed=true]{background:white;color:var(--green);box-shadow:0 1px 3px #0001}#diff-rendered{overflow:auto;flex:1;padding:27px 32px;font:14px/1.8 ui-monospace,SFMono-Regular,Consolas,monospace;white-space:pre-wrap;overflow-wrap:break-word}#diff-rendered ins,.sample-add{background:#dcf0e1;color:#22683d;text-decoration:underline;text-decoration-color:#7ab58b;text-underline-offset:3px}#diff-rendered del,.sample-del{background:#fbe4de;color:#a84a3b;text-decoration:line-through}#diff-rendered mark{background:#ffeda6;color:inherit}#diff-rendered .comment{background:#eee5fa;color:#765196;font-style:italic}footer{background:var(--paper);border:1px solid var(--line);border-top:0;border-radius:0 0 13px 13px;padding:13px 20px;display:flex;justify-content:space-between;gap:16px;color:var(--muted);font-size:11px}.note{text-align:center;color:var(--muted);font-size:11px;line-height:1.8;margin:17px 0}.progress,.error{margin-top:12px;padding:12px 18px;border-radius:7px;display:flex;align-items:center;justify-content:space-between;gap:16px;font-size:12px}.progress{background:#e4ece0;color:#326144}.error{background:#f8e8e1;color:#9a4336}.progress button,.error button{font-size:11px;padding:5px 9px}.stale{background:#fff3ce;padding:9px 20px;font-size:11px;color:#8b6c2e;flex-shrink:0}dialog{border:1px solid var(--line);border-radius:14px;padding:30px;width:min(550px,90vw);color:var(--ink);line-height:1.8}dialog::backdrop{background:#21352666}dialog h2{font:26px Georgia;margin-top:0}dialog p,dialog ol{font-size:13px}dialog li{margin:8px 0}dialog code{background:#f1f3e9;padding:2px 4px;font-size:12px}@media(max-width:700px){header{padding:20px;flex-wrap:wrap}.brand p{display:none}.actions{margin-left:auto;gap:5px}.actions button{font-size:12px;padding:8px 10px}main{padding:0 12px}.document{padding:17px}.tab-bar{padding:0 6px;gap:5px}.tab-bar [role=tab]{padding:14px 10px}.view-controls{gap:5px}.view-controls button{max-width:70px}textarea,#diff-rendered{padding:20px;font-size:13px}section{height:65vh;min-height:320px}.diff-toolbar{padding:10px}.note{font-size:10px}}
+
+.review-toolbar{display:flex;align-items:center;flex-wrap:wrap;gap:6px;padding:10px 20px;border-bottom:1px solid var(--line);background:#f3f6ee;flex-shrink:0}.review-toolbar button{font-size:11px;padding:6px 9px}.review-toolbar .accept{background:#e0f0df;color:#28613b;border-color:#bcd4ba}.review-toolbar .reject{background:#fae8e2;color:#9e4a3a;border-color:#e4c7bd}#review-count{font-size:11px;color:var(--muted);margin-right:auto;min-width:150px}.review-divider{width:1px;height:20px;background:var(--line);margin:0 3px}.review-change{cursor:pointer;border-radius:3px;box-decoration-break:clone}.selected-change{outline:2px solid #5b8465;outline-offset:2px}.review-change:focus-visible{outline:2px solid #325c40;outline-offset:3px}@media(max-width:700px){.review-toolbar{padding:10px}#review-count{width:100%}.review-divider{display:none}}
+
+header.page-top{max-width:1256px;margin:0 auto;padding:24px 24px 16px;display:block}.page-top .brand{margin-bottom:18px}.top-toolbar{background:#f9faf6;border:1px solid var(--line);border-radius:12px;padding:13px 15px;display:flex;flex-direction:column;gap:10px}.file-controls,.review-controls,.display-controls{display:flex;align-items:center;flex-wrap:wrap;gap:7px}.review-controls{padding-top:10px;border-top:1px solid #e4e7dc}.top-toolbar button{font-size:12px;padding:7px 11px}.file-controls #filename{width:175px;padding:7px 9px;border:1px solid var(--line);border-radius:6px;font-size:13px;background:white;margin-right:6px}.file-controls .primary{min-width:84px}.top-toolbar .accept{background:#e0f0df;color:#28613b;border-color:#bcd4ba}.top-toolbar .reject{background:#fae8e2;color:#9e4a3a;border-color:#e4c7bd}.display-controls{font-size:11px;color:var(--muted);padding-top:2px}.display-controls label{display:flex;align-items:center;gap:4px;margin-left:5px}.display-controls #review-count{min-width:185px;margin-right:auto}.display-controls .segmented button{font-size:11px;padding:5px 8px}.top-toolbar button:disabled,.top-toolbar button:disabled:hover{background:#e7e9e4!important;color:#9a9f95!important;border-color:#dde0d8!important;box-shadow:none!important;opacity:1;cursor:not-allowed}.top-toolbar button:disabled[aria-pressed=true]{background:#e7e9e4!important}.tab-bar{border-top:1px solid var(--line);border-radius:10px 10px 0 0}.tab-bar [role=tab]:first-child{border-top-left-radius:8px}section{height:calc(100vh - 370px);min-height:360px}footer{flex-wrap:wrap;gap:8px 16px}#comparison-label{font-size:10px;color:var(--muted)}.page-top .progress,.page-top .error{margin-top:10px}@media(max-width:700px){header.page-top{padding:18px 12px 12px}.page-top .brand{margin-bottom:12px}.top-toolbar{padding:10px}.top-toolbar button{font-size:11px;padding:7px 8px}.file-controls #filename{width:130px;margin-right:0}.display-controls #review-count{width:auto;flex:1 1 100%}.review-controls{gap:5px}.display-controls{gap:5px}section{height:60vh;min-height:300px}}
+
+.theme-control{display:flex;align-items:center;gap:3px;margin-left:8px}.theme-control>span{margin-right:4px}.theme-control button{font-size:11px;padding:5px 9px;background:transparent}.theme-control [aria-pressed=true]{background:#dceadc;border-color:#b1c9b1;color:#245337}
+:root[data-theme=dark]{color-scheme:dark;--ink:#dce7dd;--muted:#a2afa0;--green:#82bea0;--line:#3b453c;--paper:#252e26}
+:root[data-theme=dark] body{background:#181f1a;color:var(--ink)}
+:root[data-theme=dark] button{background:#2d382e;color:#deeadf;border-color:#475649}
+:root[data-theme=dark] button:hover{background:#3b493d}
+:root[data-theme=dark] .logo{background:#8cbca0;color:#17261c}
+:root[data-theme=dark] .top-toolbar{background:#252e26;border-color:var(--line)}
+:root[data-theme=dark] .review-controls{border-color:#3b453c}
+:root[data-theme=dark] .tab-bar{background:#252e26}
+:root[data-theme=dark] .tab-bar [role=tab]{background:transparent;color:#a3afa0}
+:root[data-theme=dark] .tab-bar [aria-selected=true]{background:#202921;color:#9bd1ad}
+:root[data-theme=dark] section{background:#202921}
+:root[data-theme=dark] textarea{color:#dce7dd}
+:root[data-theme=dark] textarea::placeholder{color:#849280}
+:root[data-theme=dark] .primary{background:#46765a;color:#f4fff5;border-color:#58896b}
+:root[data-theme=dark] .primary:hover{background:#568769}
+:root[data-theme=dark] .top-toolbar .accept{background:#294e34;color:#bce9c6;border-color:#497753}
+:root[data-theme=dark] .top-toolbar .reject{background:#56352d;color:#f2c3b9;border-color:#865346}
+:root[data-theme=dark] .segmented{background:#17231b}
+:root[data-theme=dark] .segmented button{background:transparent}
+:root[data-theme=dark] .segmented [aria-pressed=true]{background:#3b503e;color:#d5eed6}
+:root[data-theme=dark] .theme-control [aria-pressed=true]{background:#3b503e;color:#d5eed6;border-color:#658465}
+:root[data-theme=dark] .top-toolbar button:disabled,:root[data-theme=dark] .top-toolbar button:disabled:hover,:root[data-theme=dark] .top-toolbar button:disabled[aria-pressed=true]{background:#303831!important;color:#757f73!important;border-color:#39433a!important;cursor:not-allowed}
+:root[data-theme=dark] #diff-rendered ins{background:#294b32;color:#ace6b9;text-decoration-color:#77af85}
+:root[data-theme=dark] #diff-rendered del{background:#54382f;color:#efb8aa}
+:root[data-theme=dark] #diff-rendered mark{background:#5b4d20;color:#f4e4a7}
+:root[data-theme=dark] #diff-rendered .comment{background:#40354f;color:#d0b9ee}
+:root[data-theme=dark] .selected-change{outline-color:#9abca1}
+:root[data-theme=dark] .review-change:focus-visible{outline-color:#c4e4cc}
+:root[data-theme=dark] .stale{background:#514822;color:#ecda9f}
+:root[data-theme=dark] .progress{background:#29432f;color:#b5dcbb}
+:root[data-theme=dark] .error{background:#52382e;color:#f0c0b1}
+:root[data-theme=dark] button:focus-visible,:root[data-theme=dark] input:focus-visible,:root[data-theme=dark] textarea:focus-visible{outline-color:#a5d8b4}
+/* GitHub Primer-inspired light and dark semantic colors, embedded for offline styling. */
+:root,:root[data-theme=light]{color-scheme:light;--ink:#1f2328;--muted:#59636e;--green:#1a7f37;--line:#d1d9e0;--paper:#f6f8fa;--gh-canvas:#ffffff;--gh-muted:#f6f8fa;--gh-button:#f6f8fa;--gh-hover:#eff2f5;--gh-accent:#0969da;--gh-selected:#ddf4ff;--gh-success:#1a7f37;--gh-success-bg:#dafbe1;--gh-danger:#cf222e;--gh-danger-bg:#ffebe9;--gh-comment:#8250df;--gh-comment-bg:#fbefff;--gh-attention:#9a6700;--gh-attention-bg:#fff8c5;--gh-disabled-bg:#eff2f5;--gh-disabled-fg:#8c959f;--gh-primary:#1f883d;--gh-primary-hover:#1a7f37}
+:root[data-theme=dark]{color-scheme:dark;--ink:#f0f6fc;--muted:#9198a1;--green:#3fb950;--line:#3d444d;--paper:#151b23;--gh-canvas:#0d1117;--gh-muted:#151b23;--gh-button:#212830;--gh-hover:#262c36;--gh-accent:#4493f8;--gh-selected:#122f50;--gh-success:#3fb950;--gh-success-bg:#12261e;--gh-danger:#f85149;--gh-danger-bg:#2d151b;--gh-comment:#ab7df8;--gh-comment-bg:#271b36;--gh-attention:#d29922;--gh-attention-bg:#2b240f;--gh-disabled-bg:#212830;--gh-disabled-fg:#656c76;--gh-primary:#238636;--gh-primary-hover:#29903b}
+:root[data-theme] body{background:var(--gh-canvas);color:var(--ink)}
+:root[data-theme] .top-toolbar,:root[data-theme] .tab-bar{background:var(--gh-muted);border-color:var(--line)}
+:root[data-theme] .review-controls{border-color:var(--line)}
+:root[data-theme] section{background:var(--gh-canvas)}
+:root[data-theme] textarea,:root[data-theme] #diff-rendered{color:var(--ink);caret-color:var(--ink)}
+:root[data-theme] textarea::placeholder{color:var(--muted)}
+:root[data-theme] button{color:var(--ink);background:var(--gh-button);border-color:var(--line)}
+:root[data-theme] button:hover{background:var(--gh-hover)}
+:root[data-theme] .primary{background:var(--gh-primary);color:#ffffff;border-color:var(--gh-primary)}
+:root[data-theme] .primary:hover{background:var(--gh-primary-hover)}
+:root[data-theme] .tab-bar [role=tab]{background:transparent;color:var(--muted)}
+:root[data-theme] .tab-bar [aria-selected=true]{background:var(--gh-canvas);color:var(--ink);border-bottom-color:#fd8c73}
+:root[data-theme] .top-toolbar .accept{background:var(--gh-success-bg);color:var(--gh-success);border-color:var(--line)}
+:root[data-theme] .top-toolbar .reject{background:var(--gh-danger-bg);color:var(--gh-danger);border-color:var(--line)}
+:root[data-theme] .segmented{background:var(--gh-canvas)}
+:root[data-theme] .segmented button,:root[data-theme] .theme-control button{background:transparent}
+:root[data-theme] .segmented [aria-pressed=true],:root[data-theme] .theme-control [aria-pressed=true]{background:var(--gh-selected);color:var(--gh-accent);border-color:var(--line)}
+:root[data-theme] .top-toolbar button:disabled,:root[data-theme] .top-toolbar button:disabled:hover,:root[data-theme] .top-toolbar button:disabled[aria-pressed=true]{background:var(--gh-disabled-bg)!important;color:var(--gh-disabled-fg)!important;border-color:var(--line)!important;cursor:not-allowed;box-shadow:none!important}
+:root[data-theme] #diff-rendered ins{background:var(--gh-success-bg);color:var(--gh-success);text-decoration-color:var(--gh-success)}
+:root[data-theme] #diff-rendered del{background:var(--gh-danger-bg);color:var(--gh-danger)}
+:root[data-theme] #diff-rendered mark{background:var(--gh-attention-bg);color:var(--gh-attention)}
+:root[data-theme] #diff-rendered .comment{background:var(--gh-comment-bg);color:var(--gh-comment)}
+:root[data-theme] .selected-change,:root[data-theme] .review-change:focus-visible{outline-color:var(--gh-accent)}
+:root[data-theme] .stale{background:var(--gh-attention-bg);color:var(--gh-attention)}
+:root[data-theme] .progress{background:var(--gh-success-bg);color:var(--gh-success)}
+:root[data-theme] .error{background:var(--gh-danger-bg);color:var(--gh-danger)}
+:root[data-theme] button:focus-visible,:root[data-theme] input:focus-visible,:root[data-theme] textarea:focus-visible{outline-color:var(--gh-accent)}
+#diff-rendered[contenteditable=true]:focus{outline:2px solid var(--gh-accent);outline-offset:-2px}#diff-rendered{cursor:text;min-height:0;tab-size:4}#diff-rendered .review-change{cursor:text}header.page-top{padding-top:16px}section{height:calc(100vh - 285px)}@media(max-width:700px){section{height:60vh}}
+textarea,#diff-rendered{white-space:pre-wrap;overflow-wrap:anywhere;word-break:normal}
+
+.file-controls{gap:7px}.file-controls .display-controls{padding-top:0;margin-left:4px;gap:7px;flex:1 1 auto}.file-controls .display-controls .theme-control{margin-left:auto}.review-controls #review-count{font-size:11px;margin-right:auto;min-width:160px}header.page-top{position:sticky;top:0;z-index:10;background:var(--gh-canvas);padding-top:10px;padding-bottom:10px}.top-toolbar{gap:8px}.display-controls button{white-space:nowrap}@media(min-width:1200px){.file-controls{flex-wrap:nowrap}.file-controls .display-controls{flex-wrap:nowrap}.theme-control{white-space:nowrap}}@media(max-width:700px){.file-controls .display-controls{flex-basis:100%;margin-left:0}.review-controls #review-count{width:100%}.file-controls .display-controls .theme-control{margin-left:0}}
+
+main,header.page-top{width:100%;max-width:1884px}
+</style></head><body>
+<header class="page-top">
+<div class="top-toolbar"><div class="file-controls"><button id="new">New</button><button id="open">Open .md</button><button id="save">Save .md</button><button id="critic" class="primary">Critic</button><div class="display-controls"><div class="segmented" role="group" aria-label="Diff display"><button data-view="critic" aria-pressed="true" disabled>Critic view</button><button data-view="raw" aria-pressed="false" disabled>Source</button></div><button id="save-diff" disabled>Save diff.md</button><div class="theme-control" role="group" aria-label="Color scheme"><span>Theme</span><button data-theme-choice="light" aria-pressed="true">GitHub Light</button><button data-theme-choice="dark" aria-pressed="false">GitHub Dark</button></div></div></div>
+<div class="review-controls"><span id="review-count">Run Critic to review changes</span><button id="previous-change" title="Previous change" disabled>←</button><button id="next-change" title="Next change" disabled>→</button><button id="accept-change" class="accept" disabled>Accept</button><button id="reject-change" class="reject" disabled>Reject</button><button id="accept-all" disabled>Accept all</button><button id="reject-all" disabled>Reject all</button><button id="undo-review" disabled>Undo</button><button id="apply-review" disabled>Apply to editor</button></div>
+</div>
+<div id="progress" class="progress" hidden><span id="progress-text" role="status"></span><button id="cancel">Cancel</button></div><div id="error" class="error" role="alert" hidden><span id="error-text"></span><button id="dismiss-error">Dismiss</button></div></header>
+<main><div class="tab-bar"><div role="tablist" aria-label="Documents"><button id="source-tab" role="tab" aria-selected="true" aria-controls="source-panel">current.md</button><button id="diff-tab" role="tab" aria-selected="false" aria-controls="diff-panel" hidden>diff.md</button></div></div>
+<section id="source-panel" role="tabpanel" aria-labelledby="source-tab"><textarea id="editor" aria-label="Markdown source editor" spellcheck="true" placeholder="Write or paste your Markdown here…"></textarea></section>
+<section id="diff-panel" role="tabpanel" aria-labelledby="diff-tab" hidden><div id="stale" class="stale" hidden>The source has changed since this comparison. Click Critic to generate a new diff.</div><div id="diff-rendered" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Editable diff with CriticMarkup colors" spellcheck="true"></div><textarea id="diff-raw" aria-label="Generated diff.md source" readonly hidden></textarea></section>
+<footer><span id="stats"></span><span id="comparison-label"></span><span id="draft-status" role="status">Draft saved locally</span><span id="runtime-status" role="status">Ready to edit</span></footer><p class="note">Click <strong>Critic</strong> to compare with an original file. You can edit directly in the Critic view and save the result as diff.md. Drafts are saved in this browser every minute. Python loads on demand and requires internet access.</p>
+</main>
+
+<input id="current-file" type="file" accept=".md,.markdown,.txt,text/plain" hidden><input id="original-file" type="file" accept=".md,.markdown,.txt,text/plain" hidden>
+<script>(() => {
+'use strict';
+const PYTHON_SOURCE="#!/usr/bin/env python3\n\"\"\"Create a word-level Critic Markup diff between two Markdown files.\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport difflib\nimport re\nfrom pathlib import Path\nfrom typing import TypeAlias\n\n\nChangeKind: TypeAlias = str | None\nNode: TypeAlias = tuple[ChangeKind, str | list[\"Node\"]]\nSpan: TypeAlias = tuple[ChangeKind, str]\nBoundaryMarkers: TypeAlias = dict[int, list[Span]]\n\nTOKEN_RE = re.compile(r\"\\s+|\\w+|[^\\w\\s]\", re.UNICODE)\nMARKERS = {\n    \"add\": (\"{++\", \"++}\"),\n    \"delete\": (\"{--\", \"--}\"),\n    \"comment\": (\"{>>\", \"<<}\"),\n}\n\n\ndef tokenize(text: str) -> list[str]:\n    \"\"\"Split text into words while retaining all whitespace and punctuation.\"\"\"\n    return TOKEN_RE.findall(text)\n\n\ndef append_span(spans: list[Span], kind: ChangeKind, content: str) -> None:\n    \"\"\"Append a span, merging it with a neighboring span of the same kind.\"\"\"\n    if not content:\n        return\n    if spans and spans[-1][0] == kind:\n        previous_kind, previous_content = spans[-1]\n        spans[-1] = (previous_kind, previous_content + content)\n    else:\n        spans.append((kind, content))\n\n\ndef word_diff(old: str, new: str) -> list[Span]:\n    \"\"\"Return unchanged, added, and deleted spans for two strings.\"\"\"\n    old_tokens = tokenize(old)\n    new_tokens = tokenize(new)\n    matcher = difflib.SequenceMatcher(None, old_tokens, new_tokens, autojunk=False)\n    spans: list[Span] = []\n\n    for operation, old_start, old_end, new_start, new_end in matcher.get_opcodes():\n        if operation == \"equal\":\n            append_span(spans, None, \"\".join(new_tokens[new_start:new_end]))\n        elif operation == \"delete\":\n            append_span(spans, \"delete\", \"\".join(old_tokens[old_start:old_end]))\n        elif operation == \"insert\":\n            append_span(spans, \"add\", \"\".join(new_tokens[new_start:new_end]))\n        elif operation == \"replace\":\n            # Critic Markup replacement syntax is deliberately not used.\n            append_span(spans, \"delete\", \"\".join(old_tokens[old_start:old_end]))\n            append_span(spans, \"add\", \"\".join(new_tokens[new_start:new_end]))\n\n    return spans\n\n\ndef render_spans(spans: list[Span]) -> str:\n    \"\"\"Render spans using only Critic Markup addition and deletion markers.\"\"\"\n    output: list[str] = []\n    for kind, content in spans:\n        if kind is None:\n            output.append(content)\n        else:\n            opening, closing = MARKERS[kind]\n            output.extend((opening, content, closing))\n    return \"\".join(output)\n\n\ndef parse_markers(\n    text: str, position: int = 0, closing_marker: str | None = None\n) -> tuple[list[Node], int, bool]:\n    \"\"\"Parse addition/deletion markers into a small nested tree.\"\"\"\n    nodes: list[Node] = []\n    plain: list[str] = []\n\n    def flush_plain() -> None:\n        if plain:\n            nodes.append((None, \"\".join(plain)))\n            plain.clear()\n\n    while position < len(text):\n        if closing_marker and text.startswith(closing_marker, position):\n            flush_plain()\n            return nodes, position + len(closing_marker), True\n\n        marker_kind: str | None = None\n        for kind, (opening, _) in MARKERS.items():\n            if text.startswith(opening, position):\n                marker_kind = kind\n                break\n\n        if marker_kind is None:\n            plain.append(text[position])\n            position += 1\n            continue\n\n        opening, child_closing = MARKERS[marker_kind]\n        marker_start = position\n        children, new_position, was_closed = parse_markers(\n            text, position + len(opening), child_closing\n        )\n        if not was_closed:\n            # Preserve malformed/unclosed markup literally.\n            plain.append(text[marker_start:new_position])\n            position = new_position\n            continue\n\n        flush_plain()\n        nodes.append((marker_kind, children))\n        position = new_position\n\n    flush_plain()\n    return nodes, position, closing_marker is None\n\n\ndef flatten_nodes(\n    nodes: list[Node], spans: list[Span], active_kind: ChangeKind = None\n) -> None:\n    \"\"\"Flatten nested markers; the innermost marker applies to its contents.\"\"\"\n    for kind, value in nodes:\n        if kind is None:\n            assert isinstance(value, str)\n            append_span(spans, active_kind, value)\n        else:\n            assert isinstance(value, list)\n            flatten_nodes(value, spans, kind)\n\n\ndef normalize_critic_markup(text: str) -> str:\n    \"\"\"Remove nesting and merge neighboring markers of the same type.\"\"\"\n    nodes, _, _ = parse_markers(text)\n    spans: list[Span] = []\n    flatten_nodes(nodes, spans)\n    return render_spans(spans)\n\n\ndef comparison_view(text: str) -> tuple[list[str], list[ChangeKind], BoundaryMarkers]:\n    \"\"\"Return the pre-change tokens while recording existing Critic Markup.\n\n    Existing additions and comments do not belong to the pre-change text, so\n    they are stored at token boundaries. Existing deletions do belong to it,\n    and their tokens are tagged so they retain their deletion markers.\n    \"\"\"\n    nodes, _, _ = parse_markers(text)\n    source_spans: list[Span] = []\n    flatten_nodes(nodes, source_spans)\n\n    tokens: list[str] = []\n    token_kinds: list[ChangeKind] = []\n    boundary_markers: BoundaryMarkers = {}\n\n    for kind, content in source_spans:\n        if kind in {\"add\", \"comment\"}:\n            boundary_markers.setdefault(len(tokens), []).append((kind, content))\n            continue\n\n        content_tokens = tokenize(content)\n        tokens.extend(content_tokens)\n        token_kinds.extend([kind] * len(content_tokens))\n\n    return tokens, token_kinds, boundary_markers\n\n\ndef markup_aware_word_diff(old: str, new: str) -> list[Span]:\n    \"\"\"Diff text without re-diffing changes already marked in either input.\"\"\"\n    old_tokens, _, _ = comparison_view(old)\n    new_tokens, new_token_kinds, boundary_markers = comparison_view(new)\n    matcher = difflib.SequenceMatcher(None, old_tokens, new_tokens, autojunk=False)\n    spans: list[Span] = []\n    emitted_boundaries: set[int] = set()\n\n    def emit_boundary(position: int) -> None:\n        if position in emitted_boundaries:\n            return\n        for kind, content in boundary_markers.get(position, []):\n            append_span(spans, kind, content)\n        emitted_boundaries.add(position)\n\n    def emit_new_range(start: int, end: int, new_kind: ChangeKind) -> None:\n        emit_boundary(start)\n        for position in range(start, end):\n            # An existing deletion remains protected instead of becoming a\n            # newly added or unchanged span.\n            kind = new_token_kinds[position] or new_kind\n            append_span(spans, kind, new_tokens[position])\n            emit_boundary(position + 1)\n\n    for operation, old_start, old_end, new_start, new_end in matcher.get_opcodes():\n        if operation == \"equal\":\n            emit_new_range(new_start, new_end, None)\n        elif operation == \"delete\":\n            append_span(spans, \"delete\", \"\".join(old_tokens[old_start:old_end]))\n            emit_boundary(new_start)\n        elif operation == \"insert\":\n            emit_new_range(new_start, new_end, \"add\")\n        elif operation == \"replace\":\n            append_span(spans, \"delete\", \"\".join(old_tokens[old_start:old_end]))\n            emit_new_range(new_start, new_end, \"add\")\n\n    emit_boundary(len(new_tokens))\n    return spans\n\n\ndef create_diff(old: str, new: str) -> str:\n    \"\"\"Create a normalized Critic Markup diff.\"\"\"\n    return render_spans(markup_aware_word_diff(old, new))\n\n\ndef parse_args() -> argparse.Namespace:\n    parser = argparse.ArgumentParser(\n        description=\"Write a word-level Critic Markup diff of two Markdown files.\"\n    )\n    parser.add_argument(\"old\", type=Path, help=\"the old Markdown file\")\n    parser.add_argument(\"new\", type=Path, help=\"the new Markdown file\")\n    return parser.parse_args()\n\n\ndef main() -> None:\n    args = parse_args()\n    old_text = args.old.read_text(encoding=\"utf-8\")\n    new_text = args.new.read_text(encoding=\"utf-8\")\n    Path(\"diff.md\").write_text(create_diff(old_text, new_text), encoding=\"utf-8\")\n\n\nif __name__ == \"__main__\":\n    main()\n";
+const $=s=>document.querySelector(s),editor=$('#editor'),filename={value:'current.md'};
+let selectedChange=0,changes=[],reviewHistory=[];
+const storageKey='critic-desk-draft-v1';let recoveredDiffDraft=null;let timer,worker=null,workerURL=null,busy=false,diffText='',comparisonSnapshot=null,diffView='critic',generation=0;
+const initial='# My manuscript\n\nEdit your Markdown here.\n\nClick Critic when you are ready to compare this text with the original file.\n';
+try{const draft=JSON.parse(localStorage.getItem(storageKey)||'null');editor.value=typeof draft?.text==='string'?draft.text:initial;filename.value=typeof draft?.name==='string'?draft.name:'current.md';if(typeof draft?.diff==='string'&&draft?.comparison)recoveredDiffDraft=draft;}catch{editor.value=initial;}
+function persist(){try{localStorage.setItem(storageKey,JSON.stringify({name:filename.value,text:editor.value,diff:comparisonSnapshot?diffText:null,comparison:comparisonSnapshot,selectedChange,diffView}));$('#draft-status').textContent='Draft saved locally';}catch{$('#draft-status').textContent='Save .md to keep your work';}}
+function refresh(){const words=editor.value.trim()?editor.value.trim().split(/\s+/u).length:0;$('#stats').textContent=words.toLocaleString()+' source words · '+editor.value.length.toLocaleString()+' characters';$('#source-tab').textContent=filename.value||'current.md';$('#stale').hidden=!comparisonSnapshot||comparisonSnapshot.current===editor.value;editor.wrap='soft';$('#diff-raw').wrap='soft';$('#diff-rendered').style.whiteSpace='pre-wrap';updateReviewControls();}
+function changed(){refresh();$('#draft-status').textContent='Saving draft…';clearTimeout(timer);timer=setTimeout(persist,250);}
+editor.addEventListener('input',changed);
+function tab(which){const source=which==='source';$('#source-panel').hidden=!source;$('#diff-panel').hidden=source;$('#source-tab').setAttribute('aria-selected',String(source));$('#diff-tab').setAttribute('aria-selected',String(!source));refresh();}
+$('#source-tab').onclick=()=>tab('source');$('#diff-tab').onclick=()=>tab('diff');
+// Render only CriticMarkup. Markdown source characters and whitespace stay visible.
+function parseCritic(text,position=0,closing=null){
+ const nodes=[];let plain='';const flush=()=>{if(plain){nodes.push({kind:null,text:plain});plain='';}};
+ const markers=[['{++','++}','add'],['{--','--}','del'],['{>>','<<}','comment'],['{==','==}','mark'],['{~~','~~}','sub']];
+ while(position<text.length){
+  if(closing&&text.startsWith(closing,position)){flush();return {nodes,position:position+closing.length,closed:true};}
+  const marker=markers.find(m=>text.startsWith(m[0],position));
+  if(!marker){plain+=text[position++];continue;}
+  const start=position,inner=parseCritic(text,position+marker[0].length,marker[1]);
+  if(!inner.closed){plain+=text.slice(start,inner.position);position=inner.position;continue;}
+  flush();if(marker[2]==='sub'){
+   const body=text.slice(start+3,inner.position-3),at=body.indexOf('~>');
+   if(at<0)nodes.push({kind:null,text:text.slice(start,inner.position)});
+   else {nodes.push({kind:'del',nodes:parseCritic(body.slice(0,at)).nodes});nodes.push({kind:'add',nodes:parseCritic(body.slice(at+2)).nodes});}
+  }else nodes.push({kind:marker[2],nodes:inner.nodes});position=inner.position;
+ }
+ flush();return {nodes,position,closed:closing===null};
+}
+function renderNodes(nodes,parent){for(const node of nodes){if(node.kind===null){parent.append(document.createTextNode(node.text));continue;}const el=document.createElement({add:'ins',del:'del',mark:'mark',comment:'span'}[node.kind]);if(node.kind==='comment')el.className='comment';renderNodes(node.nodes,el);parent.append(el);}}
+function parseReview(text,position=0,closing=null){
+ const nodes=[];let plain='',plainStart=position;
+ const flush=()=>{if(plain){nodes.push({kind:null,text:plain,start:plainStart,end:position});plain='';}};
+ const markers=[['{++','++}','add'],['{--','--}','del'],['{>>','<<}','comment'],['{==','==}','mark'],['{~~','~~}','sub']];
+ while(position<text.length){
+  if(closing&&text.startsWith(closing,position)){flush();return {nodes,position:position+closing.length,closed:true};}
+  const marker=markers.find(m=>text.startsWith(m[0],position));
+  if(!marker){if(!plain)plainStart=position;plain+=text[position++];continue;}
+  if(marker[2]==='comment'){
+   const end=text.indexOf('<<}',position+3);
+   if(end<0){if(!plain)plainStart=position;plain+=text.slice(position);position=text.length;continue;}
+   flush();const body=text.slice(position+3,end);
+   nodes.push({kind:'comment',body,nodes:[{kind:null,text:body,start:position+3,end}],start:position,end:end+3});position=end+3;continue;
+  }
+  const start=position,inner=parseReview(text,position+3,marker[1]);
+  if(!inner.closed){if(!plain)plainStart=start;plain+=text.slice(start,inner.position);position=inner.position;continue;}
+  flush();const body=text.slice(start+3,inner.position-3);
+  if(marker[2]==='sub'&&!body.includes('~>'))nodes.push({kind:null,text:text.slice(start,inner.position),start,end:inner.position});
+  else nodes.push({kind:marker[2],nodes:inner.nodes,body,start,end:inner.position});
+  position=inner.position;
+ }
+ flush();return {nodes,position,closed:closing===null};
+}
+function reviewGroups(text){
+ const nodes=parseReview(text).nodes,groups=[];
+ for(let i=0;i<nodes.length;i++){
+  const node=nodes[i];if(node.kind===null)continue;
+  const next=nodes[i+1];
+  if(node.kind==='del'&&next?.kind==='add'&&node.end===next.start){groups.push({kind:'replacement',start:node.start,end:next.end,nodes:[node,next]});i++;}
+  else groups.push({kind:node.kind,start:node.start,end:node.end,nodes:[node]});
+ }
+ return groups;
+}
+function resolveReviewNodes(nodes,action){
+ return nodes.map(node=>{
+  if(node.kind===null)return node.text;
+  if(node.kind==='comment')return '';
+  if(node.kind==='add'&&action==='reject'||node.kind==='del'&&action==='accept')return '';
+  if(node.kind==='sub'){const at=node.body.indexOf('~>');return resolveReviewNodes(parseReview(action==='accept'?node.body.slice(at+2):node.body.slice(0,at)).nodes,action);}
+  return resolveReviewNodes(node.nodes,action);
+ }).join('');
+}
+function resolveReviewGroup(group,action,all=false){
+ if(all)return resolveReviewNodes(group.nodes,action);
+ if(group.kind==='replacement')return action==='accept'?group.nodes[1].body:group.nodes[0].body;
+ const node=group.nodes[0];
+ if(node.kind==='comment')return '';
+ if(node.kind==='add'&&action==='reject'||node.kind==='del'&&action==='accept')return '';
+ if(node.kind==='sub'){const at=node.body.indexOf('~>');return action==='accept'?node.body.slice(at+2):node.body.slice(0,at);}
+ return node.body;
+}
+function applyReview(text,index,action){const group=reviewGroups(text)[index];if(!group)return text;return text.slice(0,group.start)+resolveReviewGroup(group,action)+text.slice(group.end);}
+function applyReviewAll(text,action){return resolveReviewNodes(parseReview(text).nodes,action);}
+
+function renderReviewNodes(nodes,parent){
+ for(const node of nodes){
+  if(node.kind===null){parent.append(document.createTextNode(node.text));continue;}
+  if(node.kind==='sub'){
+   const at=node.body.indexOf('~>');const old=document.createElement('del'),added=document.createElement('ins');old.dataset.criticKind='del';added.dataset.criticKind='add';
+   renderReviewNodes(parseReview(node.body.slice(0,at)).nodes,old);renderReviewNodes(parseReview(node.body.slice(at+2)).nodes,added);parent.append(old,added);continue;
+  }
+  const el=document.createElement({add:'ins',del:'del',mark:'mark',comment:'span'}[node.kind]);
+  el.dataset.criticKind=node.kind;if(node.kind==='comment')el.className='comment';renderReviewNodes(node.nodes,el);if(!el.childNodes.length)el.append(document.createTextNode(''));parent.append(el);
+ }
+}
+function renderDiff(){
+ changes=reviewGroups(diffText);selectedChange=Math.max(0,Math.min(selectedChange,changes.length-1));
+ const frag=document.createDocumentFragment();let cursor=0;
+ changes.forEach((group,index)=>{
+  renderReviewNodes(parseReview(diffText.slice(cursor,group.start)).nodes,frag);
+  const wrapper=document.createElement('span');wrapper.className='review-change'+(index===selectedChange?' selected-change':'');wrapper.dataset.changeIndex=String(index);
+  wrapper.title='Change '+(index+1)+': '+group.kind+' — click to select or edit';
+  renderReviewNodes(group.nodes,wrapper);frag.append(wrapper);cursor=group.end;
+ });
+ renderReviewNodes(parseReview(diffText.slice(cursor)).nodes,frag);$('#diff-rendered').replaceChildren(frag);$('#diff-raw').value=diffText;updateReviewControls();
+}
+function updateReviewControls(){
+ const hasDiff=comparisonSnapshot!==null;
+ const active=hasDiff&&!$('#diff-panel').hidden&&!busy;
+ const canReview=active&&changes.length>0;
+ $('#review-count').textContent=!hasDiff?'Run Critic to review changes':!active?'Open diff.md to review':changes.length?(selectedChange+1)+' of '+changes.length+' unresolved items':'All changes and comments resolved';
+ for(const id of ['accept-change','reject-change','accept-all','reject-all'])$('#'+id).disabled=!canReview;
+ $('#previous-change').disabled=!canReview||selectedChange===0;
+ $('#next-change').disabled=!canReview||selectedChange>=changes.length-1;
+ $('#undo-review').disabled=!active||!reviewHistory.length;
+ $('#apply-review').disabled=!active||!!changes.length;
+ $('#apply-review').title=!hasDiff?'Run Critic first.':changes.length?'Resolve all changes and comments before applying to the source editor.':'Copy the reviewed text to the source editor.';
+ $('#save-diff').disabled=!active;
+ document.querySelectorAll('[data-view]').forEach(button=>button.disabled=!active);
+ $('#critic').disabled=busy;$('#new').disabled=busy;$('#open').disabled=busy;$('#diff-rendered').contentEditable=hasDiff&&!busy?'true':'false';
+}
+
+function selectChange(index,scroll=false){selectedChange=Math.max(0,Math.min(index,changes.length-1));
+ document.querySelectorAll('[data-change-index]').forEach(el=>{const selected=Number(el.dataset.changeIndex)===selectedChange;el.classList.toggle('selected-change',selected);if(selected&&scroll)el.scrollIntoView({block:'center',behavior:'smooth'});});updateReviewControls();
+}
+$('#diff-rendered').onclick=event=>{const el=event.target.closest('[data-change-index]');if(el)selectChange(Number(el.dataset.changeIndex));};
+function serializeCriticDOM(root,selection=null){
+ let text='';const records=[];let anchor=null,focus=null;
+ function capture(node,offset){if(selection?.anchorNode===node&&selection.anchorOffset===offset)anchor=text.length;if(selection?.focusNode===node&&selection.focusOffset===offset)focus=text.length;}
+ function visit(node){
+  if(node.nodeType===3){const start=text.length,value=node.nodeValue||'';records.push({node,start,end:start+value.length});
+   if(selection?.anchorNode===node)anchor=start+Math.min(selection.anchorOffset,value.length);
+   if(selection?.focusNode===node)focus=start+Math.min(selection.focusOffset,value.length);text+=value;return;
+  }
+  if(node.nodeType!==1&&node!==root)return;
+  if(node.tagName==='BR'){capture(node,0);text+='\n';return;}
+  const block=node!==root&&['DIV','P'].includes(node.tagName);if(block&&text&&!text.endsWith('\n'))text+='\n';
+  const kind=node.dataset?.criticKind;
+  const markers={add:['{++','++}'],del:['{--','--}'],comment:['{>>','<<}'],mark:['{==','==}']};
+  const marker=markers[kind];if(marker)text+=marker[0];
+  const children=Array.from(node.childNodes||[]);
+  for(let index=0;index<children.length;index++){capture(node,index);visit(children[index]);}capture(node,children.length);
+  if(marker)text+=marker[1];
+ }
+ visit(root);return {text,records,anchor,focus};
+}
+function restoreCriticSelection(root,anchor,focus=anchor){
+ const selection=window.getSelection();if(!selection)return;
+ const {records}=serializeCriticDOM(root);
+ if(!records.length){const empty=document.createTextNode('');root.append(empty);records.push({node:empty,start:0,end:0});}
+ function point(offset){const position=offset??0;let best=records[0],distance=Infinity;
+  for(const record of records){const delta=position<record.start?record.start-position:position>record.end?position-record.end:0;if(delta<distance){distance=delta;best=record;}}
+  return [best.node,Math.max(0,Math.min((best.node.nodeValue||'').length,position-best.start))];
+ }
+ const a=point(anchor),f=point(focus);root.focus();
+ if(selection.setBaseAndExtent)selection.setBaseAndExtent(a[0],a[1],f[0],f[1]);
+ else{const range=document.createRange();range.setStart(f[0],f[1]);range.collapse(true);selection.removeAllRanges();selection.addRange(range);}
+}
+
+const criticEditor=$('#diff-rendered');let composingCritic=false,reviewRedo=[],pendingCriticSelection=null;
+function rememberReview(){reviewHistory.push({text:diffText,index:selectedChange,selection:pendingCriticSelection});pendingCriticSelection=null;if(reviewHistory.length>100)reviewHistory.shift();reviewRedo=[];}
+function syncCriticEdit(){
+ if(composingCritic)return;
+ const state=serializeCriticDOM(criticEditor,window.getSelection());
+ if(state.text===diffText){pendingCriticSelection=null;return;}
+ rememberReview();diffText=state.text;changes=reviewGroups(diffText);
+ const active=changes.findIndex(group=>state.focus>=group.start&&state.focus<=group.end);if(active>=0)selectedChange=active;
+ renderDiff();restoreCriticSelection(criticEditor,state.anchor,state.focus);$('#runtime-status').textContent='diff.md edited';clearTimeout(timer);timer=setTimeout(persist,250);
+}
+function undoReview(){const previous=reviewHistory.pop();if(!previous)return;
+ const editing=document.activeElement===criticEditor,currentSelection=serializeCriticDOM(criticEditor,window.getSelection());
+ reviewRedo.push({text:diffText,index:selectedChange,selection:currentSelection});diffText=previous.text;selectedChange=previous.index;renderDiff();showDiffView(diffView);
+ if(editing)restoreCriticSelection(criticEditor,previous.selection?.anchor??currentSelection.anchor,previous.selection?.focus??currentSelection.focus);
+ pendingCriticSelection=null;$('#runtime-status').textContent='Edit or review decision undone';
+}
+function redoReview(){const next=reviewRedo.pop();if(!next)return;
+ const editing=document.activeElement===criticEditor,currentSelection=serializeCriticDOM(criticEditor,window.getSelection());
+ reviewHistory.push({text:diffText,index:selectedChange,selection:currentSelection});diffText=next.text;selectedChange=next.index;renderDiff();showDiffView(diffView);
+ if(editing)restoreCriticSelection(criticEditor,next.selection?.anchor??currentSelection.anchor,next.selection?.focus??currentSelection.focus);
+ pendingCriticSelection=null;$('#runtime-status').textContent='Edit or review decision redone';
+}
+function insertCriticText(text){
+ const selection=window.getSelection();if(!selection||!selection.rangeCount)return;
+ const range=selection.getRangeAt(0);if(!criticEditor.contains(range.commonAncestorContainer))return;
+ pendingCriticSelection=serializeCriticDOM(criticEditor,selection);range.deleteContents();const node=document.createTextNode(text);range.insertNode(node);range.setStartAfter(node);range.collapse(true);selection.removeAllRanges();selection.addRange(range);syncCriticEdit();
+}
+criticEditor.addEventListener('input',syncCriticEdit);
+criticEditor.addEventListener('compositionstart',()=>{pendingCriticSelection=serializeCriticDOM(criticEditor,window.getSelection());composingCritic=true;});
+criticEditor.addEventListener('compositionend',()=>{composingCritic=false;syncCriticEdit();});
+criticEditor.addEventListener('beforeinput',event=>{
+ if(composingCritic)return;
+ pendingCriticSelection=serializeCriticDOM(criticEditor,window.getSelection());
+ if(event.inputType==='insertParagraph'||event.inputType==='insertLineBreak'){event.preventDefault();insertCriticText('\n');}
+ if(event.inputType==='historyUndo'){event.preventDefault();undoReview();}
+ if(event.inputType==='historyRedo'){event.preventDefault();redoReview();}
+});
+criticEditor.addEventListener('paste',event=>{event.preventDefault();insertCriticText(event.clipboardData?.getData('text/plain')||'');});
+criticEditor.addEventListener('drop',event=>event.preventDefault());
+criticEditor.addEventListener('keydown',event=>{
+ if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='z'){event.preventDefault();event.shiftKey?redoReview():undoReview();}
+ if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='y'){event.preventDefault();redoReview();}
+ if(event.key==='Tab'&&!event.ctrlKey&&!event.metaKey){event.preventDefault();insertCriticText('    ');}
+});
+
+function decide(action,all=false){if(!changes.length)return;rememberReview();diffText=all?applyReviewAll(diffText,action):applyReview(diffText,selectedChange,action);renderDiff();showDiffView(diffView);persist();$('#runtime-status').textContent=all?'All changes '+(action==='accept'?'accepted':'rejected'):'Change '+(action==='accept'?'accepted':'rejected');}
+$('#accept-change').onclick=()=>decide('accept');$('#reject-change').onclick=()=>decide('reject');
+$('#accept-all').onclick=()=>decide('accept',true);$('#reject-all').onclick=()=>decide('reject',true);
+$('#previous-change').onclick=()=>{showDiffView('critic');selectChange(selectedChange-1,true);};$('#next-change').onclick=()=>{showDiffView('critic');selectChange(selectedChange+1,true);};
+$('#undo-review').onclick=undoReview;
+$('#apply-review').onclick=()=>{if(changes.length)return;editor.value=diffText;if(comparisonSnapshot)comparisonSnapshot.current=diffText;changed();tab('source');$('#runtime-status').textContent='Reviewed text applied to editor';editor.focus();};
+
+function showDiffView(view){diffView=view;$('#diff-rendered').hidden=view==='raw';$('#diff-raw').hidden=view!=='raw';document.querySelectorAll('[data-view]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===view)));}
+document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>showDiffView(b.dataset.view));
+function download(text,name,type='text/markdown;charset=utf-8'){const url=URL.createObjectURL(new Blob([text],{type}));const link=document.createElement('a');link.href=url;link.download=name;document.body.append(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);}
+function save(){persist();download(editor.value,filename.value.trim()||'current.md');}
+$('#save').onclick=save;$('#save-diff').onclick=()=>{persist();download(diffText,'diff.md');};
+$('#open').onclick=()=>$('#current-file').click();
+$('#current-file').onchange=async()=>{const file=$('#current-file').files[0];if(!file)return;if(editor.value.trim()&&!confirm('Replace the current document? Save a .md copy first if needed.')){$('#current-file').value='';return;}try{const loaded=await file.text();editor.value=loaded;filename.value=file.name;changed();tab('source');}catch(e){showError('Could not read this file: '+e.message);}$('#current-file').value='';};
+$('#new').onclick=()=>{if(editor.value.trim()&&!confirm('Start a new document? Save a .md copy first if needed.'))return;editor.value='';filename.value='untitled.md';changed();tab('source');editor.focus();};
+function showError(message){$('#error-text').textContent=message;$('#error').hidden=false;}
+$('#dismiss-error').onclick=()=>$('#error').hidden=true;
+function progress(message){$('#progress').hidden=false;$('#progress-text').textContent=message;$('#runtime-status').textContent=message;}
+function setBusy(value){busy=value;$('#critic').disabled=value;$('#new').disabled=value;$('#open').disabled=value;if(!value)$('#progress').hidden=true;updateReviewControls();}
+function stopWorker(){if(worker)worker.terminate();worker=null;if(workerURL)URL.revokeObjectURL(workerURL);workerURL=null;}
+// A classic blob worker allows the downloaded HTML to run without a web server.
+function pythonWorker(){
+ let runtimePromise;
+ function protectComments(original,current){
+  let prefix='CRITICCOMMENTPLACEHOLDER';while(original.includes(prefix)||current.includes(prefix))prefix+='X';
+  const replacements=[];
+  function mask(text){return text.replace(/\{>>([\s\S]*?)<<\}/g,(_,body)=>{const token=prefix+replacements.length+'END';replacements.push([token,body]);return '{>>'+token+'<<}';});}
+  const old=mask(original),now=mask(current);
+  return {original:old,current:now,restore(text){for(const [token,body] of replacements)text=text.split(token).join(body);return text;}};
+ }
+ async function runtime(){
+  if(!runtimePromise)runtimePromise=(async()=>{
+   self.postMessage({type:'status',message:'Loading Python runtime…'});
+   importScripts('https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js');
+   const py=await loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.29.3/full/'});
+   py.FS.mkdir('/critic-work');return py;
+  })();
+  return runtimePromise;
+ }
+ self.onmessage=async(event)=>{
+  try{
+   const {original,current,script}=event.data,protectedText=protectComments(original,current),py=await runtime();
+   self.postMessage({type:'status',message:'Running diff.py…'});
+   py.FS.writeFile('/critic-work/diff.py',script,{encoding:'utf8'});
+   py.FS.writeFile('/critic-work/original.md',protectedText.original,{encoding:'utf8'});
+   py.FS.writeFile('/critic-work/current.md',protectedText.current,{encoding:'utf8'});
+   try{py.FS.unlink('/critic-work/diff.md');}catch{}
+   await py.runPythonAsync("import os, sys, runpy\nos.chdir('/critic-work')\nsys.argv = ['diff.py', 'original.md', 'current.md']\nrunpy.run_path('diff.py', run_name='__main__')\n");
+   const diff=protectedText.restore(py.FS.readFile('/critic-work/diff.md',{encoding:'utf8'}));
+   self.postMessage({type:'result',diff});
+  }catch(e){runtimePromise=null;self.postMessage({type:'error',message:String(e.message||e)});}
+ };
+}
+function ensureWorker(){if(worker)return worker;workerURL=URL.createObjectURL(new Blob(['('+pythonWorker.toString()+')()'],{type:'text/javascript'}));worker=new Worker(workerURL);return worker;}
+async function compare(file){
+ if(busy)return;setBusy(true);$('#error').hidden=true;const id=++generation;
+ const snapshot={current:editor.value,name:filename.value||'current.md',originalName:file.name};
+ progress('Reading the original file…');
+ try{
+  const original=await file.text();if(id!==generation)return;
+  const instance=ensureWorker();
+  instance.onmessage=event=>{
+   if(id!==generation)return;
+   const data=event.data;
+   if(data.type==='status')progress(data.message);
+   if(data.type==='result'){
+    diffText=data.diff;comparisonSnapshot=snapshot;selectedChange=0;reviewHistory=[];reviewRedo=[];renderDiff();showDiffView('critic');$('#diff-tab').hidden=false;
+    $('#comparison-label').textContent=snapshot.originalName+' → '+snapshot.name;setBusy(false);$('#runtime-status').textContent='diff.md generated · Python in browser';tab('diff');
+   }
+   if(data.type==='error'){setBusy(false);stopWorker();$('#runtime-status').textContent='Comparison failed';showError('Could not run diff.py. Check your internet connection and access to cdn.jsdelivr.net, then try Critic again. Details: '+data.message);}
+  };
+  instance.onerror=e=>{if(id!==generation)return;setBusy(false);stopWorker();$('#runtime-status').textContent='Comparison failed';showError('Python could not start in this browser. Check internet access or try Chrome, Edge, or Safari. '+(e.message||''));};
+  progress('Preparing Python…');instance.postMessage({original,current:snapshot.current,script:PYTHON_SOURCE});
+ }catch(e){if(id!==generation)return;setBusy(false);stopWorker();$('#runtime-status').textContent='Comparison failed';showError('Could not compare the files: '+e.message);}
+}
+$('#critic').onclick=()=>{if(!busy){$('#original-file').value='';$('#original-file').click();}};
+$('#original-file').onchange=()=>{const file=$('#original-file').files[0];if(file)compare(file);};
+$('#cancel').onclick=()=>{generation++;stopWorker();setBusy(false);$('#runtime-status').textContent='Comparison canceled';};
+
+document.addEventListener('keydown',e=>{if((e.metaKey||e.ctrlKey)&&e.key.toLowerCase()==='s'){e.preventDefault();$('#diff-panel').hidden?save():$('#save-diff').click();}if((e.metaKey||e.ctrlKey)&&e.key==='Enter'){e.preventDefault();$('#critic').click();}});
+$('#source-tab').onkeydown=e=>{if(e.key==='ArrowRight'&&!$('#diff-tab').hidden){e.preventDefault();tab('diff');$('#diff-tab').focus();}};
+$('#diff-tab').onkeydown=e=>{if(e.key==='ArrowLeft'){e.preventDefault();tab('source');$('#source-tab').focus();}};
+
+function applyTheme(theme){
+ const value=theme==='dark'?'dark':'light';document.documentElement.dataset.theme=value;
+ document.querySelectorAll('[data-theme-choice]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.themeChoice===value)));
+ try{localStorage.setItem('critic-desk-theme-v1',value);}catch{}
+}
+let initialTheme='light';
+try{const stored=localStorage.getItem('critic-desk-theme-v1');initialTheme=['light','dark'].includes(stored)?stored:(typeof window.matchMedia==='function'&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');}catch{}
+applyTheme(initialTheme);
+document.querySelectorAll('[data-theme-choice]').forEach(button=>button.onclick=()=>applyTheme(button.dataset.themeChoice));
+
+// Browser draft recovery is saved every minute.
+setInterval(persist,60000);
+if(recoveredDiffDraft){
+ diffText=recoveredDiffDraft.diff;comparisonSnapshot=recoveredDiffDraft.comparison;
+ selectedChange=Number.isInteger(recoveredDiffDraft.selectedChange)?recoveredDiffDraft.selectedChange:0;
+ $('#diff-tab').hidden=false;$('#comparison-label').textContent=(comparisonSnapshot.originalName||'original.md')+' → '+(comparisonSnapshot.name||filename.value);
+ renderDiff();showDiffView(recoveredDiffDraft.diffView==='raw'?'raw':'critic');
+}
+window.addEventListener('pagehide',persist);refresh();persist();
+})();
+</script></body></html>
