@@ -82,13 +82,12 @@ main,header.page-top{width:100%;max-width:1884px}
 <main><div class="tab-bar"><div role="tablist" aria-label="Documents"><button id="source-tab" role="tab" aria-selected="true" aria-controls="source-panel">current.md</button><button id="diff-tab" role="tab" aria-selected="false" aria-controls="diff-panel" hidden>diff.md</button></div></div>
 <section id="source-panel" role="tabpanel" aria-labelledby="source-tab"><textarea id="editor" aria-label="Markdown source editor" spellcheck="true" placeholder="Write or paste your Markdown here…"></textarea></section>
 <section id="diff-panel" role="tabpanel" aria-labelledby="diff-tab" hidden><div id="stale" class="stale" hidden>The source has changed since this comparison. Click Critic to generate a new diff.</div><div id="diff-rendered" contenteditable="true" role="textbox" aria-multiline="true" aria-label="Editable diff with CriticMarkup colors" spellcheck="true"></div><textarea id="diff-raw" aria-label="Generated diff.md source" readonly hidden></textarea></section>
-<footer><span id="stats"></span><span id="comparison-label"></span><span id="draft-status" role="status">Draft saved locally</span><span id="runtime-status" role="status">Ready to edit</span></footer><p class="note">Click <strong>Critic</strong> to compare with an original file. You can edit directly in the Critic view and save the result as diff.md. Drafts are saved in this browser every minute. Python loads on demand and requires internet access.</p>
+<footer><span id="stats"></span><span id="comparison-label"></span><span id="draft-status" role="status">Draft saved locally</span><span id="runtime-status" role="status">Ready to edit</span></footer><p class="note">Click <strong>Critic</strong> to compare with an original file. You can edit directly in the Critic view and save the result as diff.md. Drafts are saved in this browser every minute. Comparisons run locally and work offline.</p>
 </main>
 
 <input id="current-file" type="file" accept=".md,.markdown,.txt,text/plain" hidden><input id="original-file" type="file" accept=".md,.markdown,.txt,text/plain" hidden>
 <script>(() => {
 'use strict';
-const PYTHON_SOURCE="#!/usr/bin/env python3\n\"\"\"Create a word-level Critic Markup diff between two Markdown files.\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport difflib\nimport re\nfrom pathlib import Path\nfrom typing import TypeAlias\n\n\nChangeKind: TypeAlias = str | None\nNode: TypeAlias = tuple[ChangeKind, str | list[\"Node\"]]\nSpan: TypeAlias = tuple[ChangeKind, str]\nBoundaryMarkers: TypeAlias = dict[int, list[Span]]\n\nTOKEN_RE = re.compile(r\"\\s+|\\w+|[^\\w\\s]\", re.UNICODE)\nMARKERS = {\n    \"add\": (\"{++\", \"++}\"),\n    \"delete\": (\"{--\", \"--}\"),\n    \"comment\": (\"{>>\", \"<<}\"),\n}\n\n\ndef tokenize(text: str) -> list[str]:\n    \"\"\"Split text into words while retaining all whitespace and punctuation.\"\"\"\n    return TOKEN_RE.findall(text)\n\n\ndef append_span(spans: list[Span], kind: ChangeKind, content: str) -> None:\n    \"\"\"Append a span, merging it with a neighboring span of the same kind.\"\"\"\n    if not content:\n        return\n    if spans and spans[-1][0] == kind:\n        previous_kind, previous_content = spans[-1]\n        spans[-1] = (previous_kind, previous_content + content)\n    else:\n        spans.append((kind, content))\n\n\ndef word_diff(old: str, new: str) -> list[Span]:\n    \"\"\"Return unchanged, added, and deleted spans for two strings.\"\"\"\n    old_tokens = tokenize(old)\n    new_tokens = tokenize(new)\n    matcher = difflib.SequenceMatcher(None, old_tokens, new_tokens, autojunk=False)\n    spans: list[Span] = []\n\n    for operation, old_start, old_end, new_start, new_end in matcher.get_opcodes():\n        if operation == \"equal\":\n            append_span(spans, None, \"\".join(new_tokens[new_start:new_end]))\n        elif operation == \"delete\":\n            append_span(spans, \"delete\", \"\".join(old_tokens[old_start:old_end]))\n        elif operation == \"insert\":\n            append_span(spans, \"add\", \"\".join(new_tokens[new_start:new_end]))\n        elif operation == \"replace\":\n            # Critic Markup replacement syntax is deliberately not used.\n            append_span(spans, \"delete\", \"\".join(old_tokens[old_start:old_end]))\n            append_span(spans, \"add\", \"\".join(new_tokens[new_start:new_end]))\n\n    return spans\n\n\ndef render_spans(spans: list[Span]) -> str:\n    \"\"\"Render spans using only Critic Markup addition and deletion markers.\"\"\"\n    output: list[str] = []\n    for kind, content in spans:\n        if kind is None:\n            output.append(content)\n        else:\n            opening, closing = MARKERS[kind]\n            output.extend((opening, content, closing))\n    return \"\".join(output)\n\n\ndef parse_markers(\n    text: str, position: int = 0, closing_marker: str | None = None\n) -> tuple[list[Node], int, bool]:\n    \"\"\"Parse addition/deletion markers into a small nested tree.\"\"\"\n    nodes: list[Node] = []\n    plain: list[str] = []\n\n    def flush_plain() -> None:\n        if plain:\n            nodes.append((None, \"\".join(plain)))\n            plain.clear()\n\n    while position < len(text):\n        if closing_marker and text.startswith(closing_marker, position):\n            flush_plain()\n            return nodes, position + len(closing_marker), True\n\n        marker_kind: str | None = None\n        for kind, (opening, _) in MARKERS.items():\n            if text.startswith(opening, position):\n                marker_kind = kind\n                break\n\n        if marker_kind is None:\n            plain.append(text[position])\n            position += 1\n            continue\n\n        opening, child_closing = MARKERS[marker_kind]\n        marker_start = position\n        children, new_position, was_closed = parse_markers(\n            text, position + len(opening), child_closing\n        )\n        if not was_closed:\n            # Preserve malformed/unclosed markup literally.\n            plain.append(text[marker_start:new_position])\n            position = new_position\n            continue\n\n        flush_plain()\n        nodes.append((marker_kind, children))\n        position = new_position\n\n    flush_plain()\n    return nodes, position, closing_marker is None\n\n\ndef flatten_nodes(\n    nodes: list[Node], spans: list[Span], active_kind: ChangeKind = None\n) -> None:\n    \"\"\"Flatten nested markers; the innermost marker applies to its contents.\"\"\"\n    for kind, value in nodes:\n        if kind is None:\n            assert isinstance(value, str)\n            append_span(spans, active_kind, value)\n        else:\n            assert isinstance(value, list)\n            flatten_nodes(value, spans, kind)\n\n\ndef normalize_critic_markup(text: str) -> str:\n    \"\"\"Remove nesting and merge neighboring markers of the same type.\"\"\"\n    nodes, _, _ = parse_markers(text)\n    spans: list[Span] = []\n    flatten_nodes(nodes, spans)\n    return render_spans(spans)\n\n\ndef comparison_view(text: str) -> tuple[list[str], list[ChangeKind], BoundaryMarkers]:\n    \"\"\"Return the pre-change tokens while recording existing Critic Markup.\n\n    Existing additions and comments do not belong to the pre-change text, so\n    they are stored at token boundaries. Existing deletions do belong to it,\n    and their tokens are tagged so they retain their deletion markers.\n    \"\"\"\n    nodes, _, _ = parse_markers(text)\n    source_spans: list[Span] = []\n    flatten_nodes(nodes, source_spans)\n\n    tokens: list[str] = []\n    token_kinds: list[ChangeKind] = []\n    boundary_markers: BoundaryMarkers = {}\n\n    for kind, content in source_spans:\n        if kind in {\"add\", \"comment\"}:\n            boundary_markers.setdefault(len(tokens), []).append((kind, content))\n            continue\n\n        content_tokens = tokenize(content)\n        tokens.extend(content_tokens)\n        token_kinds.extend([kind] * len(content_tokens))\n\n    return tokens, token_kinds, boundary_markers\n\n\ndef markup_aware_word_diff(old: str, new: str) -> list[Span]:\n    \"\"\"Diff text without re-diffing changes already marked in either input.\"\"\"\n    old_tokens, _, _ = comparison_view(old)\n    new_tokens, new_token_kinds, boundary_markers = comparison_view(new)\n    matcher = difflib.SequenceMatcher(None, old_tokens, new_tokens, autojunk=False)\n    spans: list[Span] = []\n    emitted_boundaries: set[int] = set()\n\n    def emit_boundary(position: int) -> None:\n        if position in emitted_boundaries:\n            return\n        for kind, content in boundary_markers.get(position, []):\n            append_span(spans, kind, content)\n        emitted_boundaries.add(position)\n\n    def emit_new_range(start: int, end: int, new_kind: ChangeKind) -> None:\n        emit_boundary(start)\n        for position in range(start, end):\n            # An existing deletion remains protected instead of becoming a\n            # newly added or unchanged span.\n            kind = new_token_kinds[position] or new_kind\n            append_span(spans, kind, new_tokens[position])\n            emit_boundary(position + 1)\n\n    for operation, old_start, old_end, new_start, new_end in matcher.get_opcodes():\n        if operation == \"equal\":\n            emit_new_range(new_start, new_end, None)\n        elif operation == \"delete\":\n            append_span(spans, \"delete\", \"\".join(old_tokens[old_start:old_end]))\n            emit_boundary(new_start)\n        elif operation == \"insert\":\n            emit_new_range(new_start, new_end, \"add\")\n        elif operation == \"replace\":\n            append_span(spans, \"delete\", \"\".join(old_tokens[old_start:old_end]))\n            emit_new_range(new_start, new_end, \"add\")\n\n    emit_boundary(len(new_tokens))\n    return spans\n\n\ndef create_diff(old: str, new: str) -> str:\n    \"\"\"Create a normalized Critic Markup diff.\"\"\"\n    return render_spans(markup_aware_word_diff(old, new))\n\n\ndef parse_args() -> argparse.Namespace:\n    parser = argparse.ArgumentParser(\n        description=\"Write a word-level Critic Markup diff of two Markdown files.\"\n    )\n    parser.add_argument(\"old\", type=Path, help=\"the old Markdown file\")\n    parser.add_argument(\"new\", type=Path, help=\"the new Markdown file\")\n    return parser.parse_args()\n\n\ndef main() -> None:\n    args = parse_args()\n    old_text = args.old.read_text(encoding=\"utf-8\")\n    new_text = args.new.read_text(encoding=\"utf-8\")\n    Path(\"diff.md\").write_text(create_diff(old_text, new_text), encoding=\"utf-8\")\n\n\nif __name__ == \"__main__\":\n    main()\n";
 const $=s=>document.querySelector(s),editor=$('#editor'),filename={value:'current.md'};
 let selectedChange=0,changes=[],reviewHistory=[];
 const storageKey='critic-desk-draft-v1';let recoveredDiffDraft=null;let timer,worker=null,workerURL=null,busy=false,diffText='',comparisonSnapshot=null,diffView='critic',generation=0;
@@ -313,40 +312,103 @@ $('#dismiss-error').onclick=()=>$('#error').hidden=true;
 function progress(message){$('#progress').hidden=false;$('#progress-text').textContent=message;$('#runtime-status').textContent=message;}
 function setBusy(value){busy=value;$('#critic').disabled=value;$('#new').disabled=value;$('#open').disabled=value;if(!value)$('#progress').hidden=true;updateReviewControls();}
 function stopWorker(){if(worker)worker.terminate();worker=null;if(workerURL)URL.revokeObjectURL(workerURL);workerURL=null;}
-// A classic blob worker allows the downloaded HTML to run without a web server.
-function pythonWorker(){
- let runtimePromise;
- function protectComments(original,current){
-  let prefix='CRITICCOMMENTPLACEHOLDER';while(original.includes(prefix)||current.includes(prefix))prefix+='X';
-  const replacements=[];
-  function mask(text){return text.replace(/\{>>([\s\S]*?)<<\}/g,(_,body)=>{const token=prefix+replacements.length+'END';replacements.push([token,body]);return '{>>'+token+'<<}';});}
-  const old=mask(original),now=mask(current);
-  return {original:old,current:now,restore(text){for(const [token,body] of replacements)text=text.split(token).join(body);return text;}};
+// Keep comparison in a worker so large documents remain cancellable.
+// All code is embedded: downloaded HTML also works offline via file://.
+function diffWorker(){
+ // Match Python's Unicode whitespace and word tokenization in diff.py.
+ const tokenize=text=>text.match(/[\t-\r \x1c-\x1f\x85\p{Zs}\u2028\u2029]+|[\p{L}\p{N}_]+|[^\t-\r \x1c-\x1f\x85\p{Zs}\u2028\u2029\p{L}\p{N}_]/gu)||[];
+ const sharedSpaces=/^[\t\v\f \x1c-\x1f\x85\p{Zs}\u2028\u2029]+$/u;
+ function comparisonView(text){
+  const parts=[],markers=[];let start=0,length=0;
+  for(const match of text.matchAll(/\{>>[\s\S]*?<<\}|\{==|==\}/g)){
+   const part=text.slice(start,match.index);parts.push(part);length+=part.length;
+   markers.push([length,match[0]]);start=match.index+match[0].length;
+  }
+  parts.push(text.slice(start));return {text:parts.join(''),markers};
  }
- async function runtime(){
-  if(!runtimePromise)runtimePromise=(async()=>{
-   self.postMessage({type:'status',message:'Loading Python runtime…'});
-   importScripts('https://cdn.jsdelivr.net/pyodide/v0.29.3/full/pyodide.js');
-   const py=await loadPyodide({indexURL:'https://cdn.jsdelivr.net/pyodide/v0.29.3/full/'});
-   py.FS.mkdir('/critic-work');return py;
-  })();
-  return runtimePromise;
+ // SequenceMatcher's longest contiguous matches, with no junk filtering.
+ // Ascending traversal preserves its earliest-match tie breaking.
+ function matchingBlocks(a,b){
+  const positions=new Map();
+  b.forEach((token,j)=>{if(!positions.has(token))positions.set(token,[]);positions.get(token).push(j);});
+  const queue=[[0,a.length,0,b.length]],matches=[];
+  while(queue.length){
+   const [alo,ahi,blo,bhi]=queue.pop();let bestI=alo,bestJ=blo,bestSize=0,previous=new Map();
+   for(let i=alo;i<ahi;i++){
+    const lengths=new Map();
+    for(const j of positions.get(a[i])||[]){
+     if(j<blo)continue;if(j>=bhi)break;
+     const size=(previous.get(j-1)||0)+1;lengths.set(j,size);
+     if(size>bestSize){bestI=i-size+1;bestJ=j-size+1;bestSize=size;}
+    }
+    previous=lengths;
+   }
+   if(!bestSize)continue;
+   matches.push([bestI,bestJ,bestSize]);
+   if(alo<bestI&&blo<bestJ)queue.push([alo,bestI,blo,bestJ]);
+   if(bestI+bestSize<ahi&&bestJ+bestSize<bhi)queue.push([bestI+bestSize,ahi,bestJ+bestSize,bhi]);
+  }
+  matches.sort((x,y)=>x[0]-y[0]||x[1]-y[1]);
+  const merged=[];
+  for(const match of matches){
+   const last=merged[merged.length-1];
+   if(last&&last[0]+last[2]===match[0]&&last[1]+last[2]===match[1])last[2]+=match[2];
+   else merged.push(match);
+  }
+  merged.push([a.length,b.length,0]);return merged;
  }
- self.onmessage=async(event)=>{
+ function createDiff(original,current){
+  const old=tokenize(comparisonView(original).text),now=comparisonView(current);
+  const tokens=tokenize(now.text),offsets=[0],output=[];let markerIndex=0;
+  for(const token of tokens)offsets.push(offsets[offsets.length-1]+token.length);
+  function emit(text,kind='equal'){
+   if(!text)return;
+   if(kind==='equal')output.push(text);
+   else{const [opening,closing]=kind==='insert'?['{++','++}']:['{--','--}'];output.push(opening,text,closing);}
+  }
+  function emitNew(start,end,kind){
+   start=offsets[start];end=offsets[end];
+   while(markerIndex<now.markers.length&&now.markers[markerIndex][0]<=end){
+    const [position,marker]=now.markers[markerIndex++];
+    emit(now.text.slice(start,position),kind);output.push(marker);start=position;
+   }
+   emit(now.text.slice(start,end),kind);
+  }
+  const opcodes=[];let i=0,j=0;
+  for(const [ai,bj,size] of matchingBlocks(old,tokens)){
+   if(i<ai||j<bj)opcodes.push([i<ai?(j<bj?'replace':'delete'):'insert',i,ai,j,bj]);
+   if(size)opcodes.push(['equal',ai,ai+size,bj,bj+size]);
+   i=ai+size;j=bj+size;
+  }
+  const merged=[];
+  for(let index=0;index<opcodes.length;index++){
+   let [operation,a,b,c,d]=opcodes[index];
+   if(operation!=='equal'){
+    // Include shared spaces between consecutive changes, without crossing lines.
+    while(index+2<opcodes.length){
+     const [gap,ga,gb]=opcodes[index+1], [following,,nb,,nd]=opcodes[index+2];
+     if(gap!=='equal'||following==='equal'||!sharedSpaces.test(old.slice(ga,gb).join('')))break;
+     b=nb;d=nd;index+=2;
+    }
+    if(a<b&&c<d)operation='replace';
+   }
+   merged.push([operation,a,b,c,d]);
+  }
+  for(const [operation,a,b,c,d] of merged){
+   if(operation==='delete'||operation==='replace')emit(old.slice(a,b).join(''),'delete');
+   emitNew(c,d,operation==='replace'?'insert':operation);
+  }
+  emitNew(tokens.length,tokens.length,'equal');return output.join('');
+ }
+ self.onmessage=event=>{
   try{
-   const {original,current,script}=event.data,protectedText=protectComments(original,current),py=await runtime();
-   self.postMessage({type:'status',message:'Running diff.py…'});
-   py.FS.writeFile('/critic-work/diff.py',script,{encoding:'utf8'});
-   py.FS.writeFile('/critic-work/original.md',protectedText.original,{encoding:'utf8'});
-   py.FS.writeFile('/critic-work/current.md',protectedText.current,{encoding:'utf8'});
-   try{py.FS.unlink('/critic-work/diff.md');}catch{}
-   await py.runPythonAsync("import os, sys, runpy\nos.chdir('/critic-work')\nsys.argv = ['diff.py', 'original.md', 'current.md']\nrunpy.run_path('diff.py', run_name='__main__')\n");
-   const diff=protectedText.restore(py.FS.readFile('/critic-work/diff.md',{encoding:'utf8'}));
-   self.postMessage({type:'result',diff});
-  }catch(e){runtimePromise=null;self.postMessage({type:'error',message:String(e.message||e)});}
+   self.postMessage({type:'status',message:'Comparing documents…'});
+   const {original,current}=event.data;
+   self.postMessage({type:'result',diff:createDiff(original,current)});
+  }catch(e){self.postMessage({type:'error',message:String(e.message||e)});}
  };
 }
-function ensureWorker(){if(worker)return worker;workerURL=URL.createObjectURL(new Blob(['('+pythonWorker.toString()+')()'],{type:'text/javascript'}));worker=new Worker(workerURL);return worker;}
+function ensureWorker(){if(worker)return worker;workerURL=URL.createObjectURL(new Blob(['('+diffWorker.toString()+')()'],{type:'text/javascript'}));worker=new Worker(workerURL);return worker;}
 async function compare(file){
  if(busy)return;setBusy(true);$('#error').hidden=true;const id=++generation;
  const snapshot={current:editor.value,name:filename.value||'current.md',originalName:file.name};
@@ -360,12 +422,12 @@ async function compare(file){
    if(data.type==='status')progress(data.message);
    if(data.type==='result'){
     diffText=data.diff;comparisonSnapshot=snapshot;selectedChange=0;reviewHistory=[];reviewRedo=[];renderDiff();showDiffView('critic');$('#diff-tab').hidden=false;
-    $('#comparison-label').textContent=snapshot.originalName+' → '+snapshot.name;setBusy(false);$('#runtime-status').textContent='diff.md generated · Python in browser';tab('diff');
+    $('#comparison-label').textContent=snapshot.originalName+' → '+snapshot.name;setBusy(false);$('#runtime-status').textContent='diff.md generated · local comparison';tab('diff');
    }
-   if(data.type==='error'){setBusy(false);stopWorker();$('#runtime-status').textContent='Comparison failed';showError('Could not run diff.py. Check your internet connection and access to cdn.jsdelivr.net, then try Critic again. Details: '+data.message);}
+   if(data.type==='error'){setBusy(false);stopWorker();$('#runtime-status').textContent='Comparison failed';showError('Could not compare the files. Try Critic again. Details: '+data.message);}
   };
-  instance.onerror=e=>{if(id!==generation)return;setBusy(false);stopWorker();$('#runtime-status').textContent='Comparison failed';showError('Python could not start in this browser. Check internet access or try Chrome, Edge, or Safari. '+(e.message||''));};
-  progress('Preparing Python…');instance.postMessage({original,current:snapshot.current,script:PYTHON_SOURCE});
+  instance.onerror=e=>{if(id!==generation)return;setBusy(false);stopWorker();$('#runtime-status').textContent='Comparison failed';showError('The comparison worker could not start. Try a browser that supports Web Workers. '+(e.message||''));};
+  progress('Preparing comparison…');instance.postMessage({original,current:snapshot.current});
  }catch(e){if(id!==generation)return;setBusy(false);stopWorker();$('#runtime-status').textContent='Comparison failed';showError('Could not compare the files: '+e.message);}
 }
 $('#critic').onclick=()=>{if(!busy){$('#original-file').value='';$('#original-file').click();}};
